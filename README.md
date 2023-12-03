@@ -7,7 +7,7 @@ This is a dependency free implementation of BLIP-2 ViT-L OPT2.7B framework sugge
 # To-Do List
 
 1. ViT-L/14 implementation
-This will be a full implementation of the [ViT-L/14 from CLIP](Learning Transferable Visual Models From Natural Language Supervision) but the last layer will be removed when used, according to the authors:
+This will be a full implementation of the [ViT-L/14 from CLIP](https://arxiv.org/abs/2103.00020) but the last layer will be removed when used, according to the authors:
 > We remove the last layer of the ViT and uses the second last layer’s output features, which leads to slightly better performance.
 
 - [ ] Load an image
@@ -18,7 +18,7 @@ This will be a full implementation of the [ViT-L/14 from CLIP](Learning Transfer
 
 - [ ] Implement tokenizer
 - [ ] Tokenize text
-- [ ] Implement the [OPT 2.7B ](OPT: Open Pre-trained Transformer Language Models) language model
+- [ ] Implement the [OPT 2.7B ](https://arxiv.org/abs/2205.01068) language model
 
 3. Q-Former Implementation
 
