@@ -27,5 +27,5 @@ This will be a full implementation of the [ViT-L/14 from CLIP](https://arxiv.org
 - [ ] Get output tokens
 
 4. Global logic
-- [ ] Implement and load the fully conneted layer between Q-Former and the language model
+- [ ] Implement and load the fully connected layer between the Q-Former and the language model
 - [ ] Connect the three parts
