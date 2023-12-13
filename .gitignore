@@ -43,6 +43,9 @@ CMakeCache.txt
 CMakeScripts/
 CMakeTmp/
 
+# Models
+models/
+
 # Ignore build directories
 build/
 
