@@ -30,3 +30,22 @@
 *.exe
 *.out
 *.app
+
+# Venv
+./venv
+
+# Ignore Makefile
+Makefile
+
+# Ignore CMake build directories
+CMakeFiles/
+CMakeCache.txt
+CMakeScripts/
+CMakeTmp/
+
+# Ignore build directories
+build/
+
+# Other
+.DS_Store
+settings.json
