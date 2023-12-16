@@ -6,6 +6,8 @@ import torch
 from gguf import *
 from transformers import Blip2ForConditionalGeneration, Blip2Processor
 
+GGML_MAX_NAME = 64
+
 VISION = "blip2.vision"
 Q_FORMER = "blip2.q_former"
 TEXT = "blip2.text"
@@ -13,7 +15,6 @@ TEXT = "blip2.text"
 
 def k(raw_key: str, arch: str) -> str:
     return raw_key.format(arch=arch)
-
 
 ap = argparse.ArgumentParser(prog="convert_hf_to_gguf.py")
 ap.add_argument(
@@ -64,7 +65,10 @@ output_prefix = os.path.basename(output_dir).replace("ggml_", "")
 fname_out = os.path.join(
     output_dir, f"{output_prefix}_ggml-{fname_middle}-{ftype_str[ftype]}.gguf"
 )
-fout = GGUFWriter(path=fname_out, arch="clip")
+fout = GGUFWriter(path=fname_out, arch="blip2")
+fout.add_name("BLIP2 ViT-G OPT2.7B")
+fout.add_file_type(ftype)
+fout.add_description("BLIP2 with both vision and text.")
 
 
 # image encoder hparams
@@ -114,9 +118,10 @@ fout.add_token_list(tokens)
 
 
 for name, data in list_vars.items():
-    data = data.squeeze().numpy()
-    print(f"{name} - {ftype_str} - shape = {data.shape}")
-    fout.add_tensor(name, data)
+    data = data.numpy().astype(np.float16)
+    fout.add_tensor(name[:GGML_MAX_NAME - 1], data)
+    print(f"{name[:GGML_MAX_NAME - 1]} - {ftype_str} - shape = {data.shape}")
+
 
 fout.write_header_to_file()
 fout.write_kv_data_to_file()
