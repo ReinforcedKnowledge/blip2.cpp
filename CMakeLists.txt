@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(BLIP2)
+project(blip2)
 
 # Add the ggml submodule to your project
 add_subdirectory(ggml)
