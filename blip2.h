@@ -129,6 +129,8 @@ int get_key_idx(const gguf_context * ctx, const char * key);
 const uint32_t get_u32(const gguf_context * ctx, std::string key);
 const float get_f32(const gguf_context * ctx, std::string key);
 struct ggml_tensor* get_tensor(struct ggml_context * ctx, std::string name);
+void printShape(struct ggml_tensor *tensor);
+void printTensorInfo(struct ggml_tensor* tensor);
 void blip2_free(blip2_ctx* ctx);
 
 struct blip2_ctx* blip2_model_load(const char * fname);

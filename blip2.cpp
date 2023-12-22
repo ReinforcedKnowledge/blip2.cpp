@@ -82,6 +82,33 @@ struct ggml_tensor* get_tensor(struct ggml_context* ctx, std::string name) {
     return cur;
 }
 
+// Function to print the shape of a tensor
+void printShape(struct ggml_tensor* tensor) {
+    int p = GGML_MAX_DIMS - 1; // Start from the last element
+
+    while (p >= 0 && tensor->ne[p] == 1) {
+        p--; // Skip elements with a value of 1
+    }
+
+    if (p >= 0) {
+        std::cout << "(" << tensor->ne[p];
+        for (int i = p - 1; i >= 0; i--) {
+            std::cout << ", " << tensor->ne[i];
+        }
+        std::cout << ")" << std::endl;
+    }
+}
+
+// Function to print tensor information
+void printTensorInfo(struct ggml_tensor* tensor) {
+    if (tensor) {
+        std::cout << "Name: " << tensor->name << std::endl;
+        printShape(tensor);
+    } else {
+        std::cout << "Tensor is nullptr" << std::endl;
+    }
+}
+
 void blip2_free(blip2_ctx* ctx) {
     ggml_free(ctx->ctx);
     gguf_free(ctx->ctx_gguf);
@@ -104,17 +131,17 @@ struct blip2_ctx* blip2_model_load(const char* fname) {
         return nullptr;
         }
 
-    // kv
-    {
-        const int n_kv = gguf_get_n_kv(ctx);
+    // // kv
+    // {
+    //     const int n_kv = gguf_get_n_kv(ctx);
 
-        for (int i = 0; i < n_kv; ++i) {
-            const char * key = gguf_get_key(ctx, i);
+    //     for (int i = 0; i < n_kv; ++i) {
+    //         const char * key = gguf_get_key(ctx, i);
 
-            printf("%s: kv[%d]: key = %s\n", __func__, i, key);
-        }
-        printf("\n");
-    }
+    //         printf("%s: kv[%d]: key = %s\n", __func__, i, key);
+    //     }
+    //     printf("\n");
+    // }
 
     // Compute context size
     size_t ctx_size = 0;
@@ -132,17 +159,17 @@ struct blip2_ctx* blip2_model_load(const char* fname) {
             size_t padded_size = ggml_nbytes_pad(cur);
             ctx_size += padded_size;
 
-            if (strncmp(name, "vision_model", strlen("vision_model")) == 0) {
-                vision_ctx_size += sizeof(struct ggml_tensor) + GGML_OBJECT_SIZE;
-                vision_ctx_size += padded_size;
-            }
+            // if (strncmp(name, "vision_model", strlen("vision_model")) == 0) {
+            //     vision_ctx_size += sizeof(struct ggml_tensor) + GGML_OBJECT_SIZE;
+            //     vision_ctx_size += padded_size;
+            // }
 
-            printf("Tensor Name: %s\n", name);
+            // printf("Tensor Name: %s\n", name);
         }
     }
-    printf("%s: model size:     %.2f MB\n", __func__, (ctx_size / 1024.0 / 1024.0));
-    printf("%s: vision encoder size:     %.2f MB\n", __func__, (vision_ctx_size / 1024.0 / 1024.0));
-    printf("%s: metadata size:  %.2f MB\n", __func__, ggml_get_mem_size(meta) / 1024.0 / 1024.0);
+    // printf("%s: model size:     %.2f MB\n", __func__, (ctx_size / 1024.0 / 1024.0));
+    // printf("%s: vision encoder size:     %.2f MB\n", __func__, (vision_ctx_size / 1024.0 / 1024.0));
+    // printf("%s: metadata size:  %.2f MB\n", __func__, ggml_get_mem_size(meta) / 1024.0 / 1024.0);
     
     blip2_ctx* new_blip2 = new blip2_ctx;
 
@@ -160,10 +187,10 @@ struct blip2_ctx* blip2_model_load(const char* fname) {
         idx = gguf_find_key(ctx, CROSS_ATTENTION_FREQUENCY);
         new_blip2->cross_attention_frequency = gguf_get_val_u32(ctx, idx);
 
-        std::cout << "vision_gelu " << std::boolalpha << new_blip2->vision_gelu << std::endl;
-        std::cout << "qformer_gelu " << std::boolalpha << new_blip2->qformer_gelu << std::endl;
-        std::cout << "num_query_tokens " << new_blip2->num_query_tokens << std::endl;
-        std::cout << "cross_attention_frequency " << new_blip2->cross_attention_frequency << std::endl;
+        // std::cout << "vision_gelu " << std::boolalpha << new_blip2->vision_gelu << std::endl;
+        // std::cout << "qformer_gelu " << std::boolalpha << new_blip2->qformer_gelu << std::endl;
+        // std::cout << "num_query_tokens " << new_blip2->num_query_tokens << std::endl;
+        // std::cout << "cross_attention_frequency " << new_blip2->cross_attention_frequency << std::endl;
     }
 
     // Load tensors
@@ -235,22 +262,29 @@ struct blip2_ctx* blip2_model_load(const char* fname) {
             new_blip2->image_std[i] = *((float *)gguf_get_arr_data(ctx, idx_std));
         }
 
-        // Print vision hparams
-        {
-            printf("\n%s: vision model hparams\n", __func__);
-            printf("image_size         %d\n", hparams.image_size);
-            printf("patch_size         %d\n", hparams.patch_size);
-            printf("v_hidden_size      %d\n", hparams.hidden_size);
-            printf("v_n_intermediate   %d\n", hparams.n_intermediate);
-            printf("v_n_head           %d\n", hparams.n_head);
-            printf("v_n_layer          %d\n", hparams.n_layer);
-        }
+        // // Print vision hparams
+        // {
+        //     printf("\n%s: vision model hparams\n", __func__);
+        //     printf("image_size         %d\n", hparams.image_size);
+        //     printf("patch_size         %d\n", hparams.patch_size);
+        //     printf("v_hidden_size      %d\n", hparams.hidden_size);
+        //     printf("v_n_intermediate   %d\n", hparams.n_intermediate);
+        //     printf("v_n_head           %d\n", hparams.n_head);
+        //     printf("v_n_layer          %d\n", hparams.n_layer);
+        // }
 
         // Load vision weights
         vision_model.patch_embeddings_w = get_tensor(new_blip2->ctx, format(V_PATCH_EMBD, "weight"));
         vision_model.patch_embeddings_b = get_tensor(new_blip2->ctx, format(V_PATCH_EMBD, "bias"));
         vision_model.class_embedding = get_tensor(new_blip2->ctx, V_CLASS_EMBD);
         vision_model.position_embeddings = get_tensor(new_blip2->ctx, V_POS_EMBD);
+
+        // Print tensor information for embeddings
+        std::cout << "Embeddings Tensor Info: " << std::endl;
+        printTensorInfo(vision_model.patch_embeddings_w);
+        printTensorInfo(vision_model.patch_embeddings_b);
+        printTensorInfo(vision_model.class_embedding);
+        printTensorInfo(vision_model.position_embeddings);
 
         vision_model.layers.resize(hparams.n_layer);
         for (int i = 0; i < hparams.n_layer; ++i) {
@@ -271,10 +305,30 @@ struct blip2_ctx* blip2_model_load(const char* fname) {
             
             layer.ln_2_w = get_tensor(new_blip2->ctx, format(V_MHA_LN2, i, "weight"));
             layer.ln_2_b = get_tensor(new_blip2->ctx, format(V_MHA_LN2, i, "bias"));
+
+            // Print tensor information for each layer
+            std::cout << "Layer " << i << " Tensor Info:" << std::endl;
+            printTensorInfo(layer.qkv_w);
+            printTensorInfo(layer.qkv_b);
+            printTensorInfo(layer.proj_w);
+            printTensorInfo(layer.proj_b);
+            printTensorInfo(layer.ln_1_w);
+            printTensorInfo(layer.ln_1_b);
+            printTensorInfo(layer.ff_1_w);
+            printTensorInfo(layer.ff_1_b);
+            printTensorInfo(layer.ff_2_w);
+            printTensorInfo(layer.ff_2_b);
+            printTensorInfo(layer.ln_2_w);
+            printTensorInfo(layer.ln_2_b);
         }
 
         vision_model.post_ln_w = get_tensor(new_blip2->ctx, format(V_LN_POST, "weight"));
         vision_model.post_ln_b = get_tensor(new_blip2->ctx, format(V_LN_POST, "bias"));
+
+        // Print tensor information for post MHA blocks layer norm
+        std::cout << "Post MHA blocks layer norm Tensor Info: " << std::endl;
+        printTensorInfo(vision_model.post_ln_w );
+        printTensorInfo(vision_model.post_ln_b);
     }
 
     ggml_free(meta);
