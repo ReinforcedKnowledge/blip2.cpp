@@ -10,7 +10,7 @@ This is a dependency free implementation of BLIP-2 ViT-L OPT2.7B framework sugge
 This will be a full implementation of the [ViT-L/14 from CLIP](https://arxiv.org/abs/2103.00020) but the last layer will be removed when used, according to the authors:
 > We remove the last layer of the ViT and uses the second last layer’s output features, which leads to slightly better performance.
 
-- [ ] Load an image
+- [X] Load an image
 - [ ] Implement the ViT-L/14
 - [ ] Get the image representation
 
@@ -27,5 +27,6 @@ This will be a full implementation of the [ViT-L/14 from CLIP](https://arxiv.org
 - [ ] Get output tokens
 
 4. Global logic
+- [X] Create and load BLIP2 GGML Context
 - [ ] Implement and load the fully connected layer between the Q-Former and the language model
 - [ ] Connect the three parts
