@@ -3,6 +3,24 @@
 #include "ggml/ggml.h"
 
 
+// Image structures
+// RGB uint8 image
+struct image_u8 {
+    int nx;
+    int ny;
+    uint8_t* data;
+    size_t size;
+};
+
+// RGB float32 image (NHWC)
+// Memory layout: RGBRGBRGB...
+struct image_f32 {
+    int nx;
+    int ny;
+    float* data;
+    size_t size;
+};
+
 // BLIP2 layer structures
 struct blip2_vision_layer {
     // attention
@@ -131,6 +149,8 @@ const float get_f32(const gguf_context * ctx, std::string key);
 struct ggml_tensor* get_tensor(struct ggml_context * ctx, std::string name);
 void printShape(struct ggml_tensor *tensor);
 void printTensorInfo(struct ggml_tensor* tensor);
+bool load_image_from_file(const char* fname, image_u8* img);
+bool blip2_image_preprocess(const blip2_ctx* ctx, const image_u8* img, image_f32* res);
 void blip2_free(blip2_ctx* ctx);
 
 struct blip2_ctx* blip2_model_load(const char * fname);
