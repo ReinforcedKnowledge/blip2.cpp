@@ -1,4 +1,4 @@
-# blip2.cpp
+# blip2.cpp (WIP)
 BLIP2 Inference in plain C/C++ with [GGML](https://github.com/ggerganov/ggml).
 
 # Description
