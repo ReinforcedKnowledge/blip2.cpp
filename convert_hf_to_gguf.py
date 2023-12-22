@@ -75,11 +75,11 @@ fout.add_description("BLIP2 with both vision and text.")
 fout.add_uint32("blip2.vision.image_size", v_hparams["image_size"])
 fout.add_uint32("blip2.vision.patch_size", v_hparams["patch_size"])
 fout.add_uint32(k(KEY_EMBEDDING_LENGTH, VISION), v_hparams["hidden_size"])
-fout.add_uint32(k(KEY_FEED_FORWARD_LENGTH, VISION), v_hparams["intermediate_size"])
-fout.add_uint32("blip2.vision.projection_dim", v_hparams["projection_dim"])
-fout.add_uint32(k(KEY_ATTENTION_HEAD_COUNT, VISION), v_hparams["num_attention_heads"])
-fout.add_float32(k(KEY_ATTENTION_LAYERNORM_EPS, VISION), v_hparams["layer_norm_eps"])
 fout.add_uint32(k(KEY_BLOCK_COUNT, VISION), v_hparams["num_hidden_layers"])
+fout.add_uint32(k(KEY_ATTENTION_HEAD_COUNT, VISION), v_hparams["num_attention_heads"])
+fout.add_uint32(k(KEY_FEED_FORWARD_LENGTH, VISION), v_hparams["intermediate_size"])
+fout.add_float32(k(KEY_ATTENTION_LAYERNORM_EPS, VISION), v_hparams["layer_norm_eps"])
+
 
 image_mean = processor.image_processor.image_mean
 image_std = processor.image_processor.image_std
